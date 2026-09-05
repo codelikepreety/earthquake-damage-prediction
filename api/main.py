@@ -1,19 +1,33 @@
 from pathlib import Path
+import os
 
 import joblib
 import pandas as pd
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from huggingface_hub import hf_hub_download
 from pydantic import BaseModel, Field
-
+load_dotenv()
 
 # --------------------------------------------------
 # Load trained model
 # --------------------------------------------------
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "models" / "earthquake_damage_model_final.pkl"
+MODEL_REPO = "codelikepreety/earthquake-damage-prediction"
+MODEL_FILENAME = "earthquake_damage_model_final.pkl"
 
-model = joblib.load(MODEL_PATH)
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+if not HF_TOKEN:
+    raise RuntimeError("HF_TOKEN environment variable is not set.")
+
+model_path = hf_hub_download(
+    repo_id=MODEL_REPO,
+    filename=MODEL_FILENAME,
+    token=HF_TOKEN
+)
+
+model = joblib.load(model_path)
 
 
 # --------------------------------------------------
