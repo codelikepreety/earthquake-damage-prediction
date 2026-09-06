@@ -491,7 +491,7 @@ if st.button("Predict Damage Grade", type="primary"):
         response = requests.post(
             f"{API_URL}/predict",
             json=payload,
-            timeout=30
+            timeout=120
         )
 
         # Raise an error if API returned 4xx/5xx
