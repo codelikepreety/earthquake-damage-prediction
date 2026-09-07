@@ -1,208 +1,205 @@
-Earthquake Damage Prediction
+<div align="center">
 
-An end-to-end machine learning application for predicting earthquake building damage.
+# 🏚️ Earthquake Damage Prediction
 
-Predicts earthquake damage grades (1–3) from structural and location-based building features, with a deployed ML API and interactive web interface.
+**An end-to-end machine learning application that predicts building damage severity after an earthquake.**
 
-<p align="center">
-  <a href="https://earthquake-damage-predictor.streamlit.app/">Live Link</a> •
-  <a href="https://github.com/codelikepreety/earthquake-damage-prediction">GitHub</a> •
-</p>
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Frontend-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Scikit-learn](https://img.shields.io/badge/Scikit--learn-Random%20Forest-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![License](https://img.shields.io/badge/License-MIT-lightgrey)](#-license)
 
-✨ Overview
+[**🚀 Live Demo**](https://earthquake-damage-predictor.streamlit.app/) • [**📘 API Docs**](https://earthquake-damage-api.onrender.com/docs) • [**💻 Source**](https://github.com/codelikepreety/earthquake-damage-prediction)
 
-This project takes a building's characteristics as input and predicts its earthquake damage category.
+</div>
 
-The goal was to build more than a notebook model — the project follows the complete path from data → model → API → deployed application.
+<br>
 
-Building Features
-       ↓
-Preprocessing
-       ↓
-Random Forest Model
-       ↓
-FastAPI
-       ↓
-Streamlit
-       ↓
-Damage Grade + Probabilities
+<div align="center">
+  <img src="./assets/screenshot-hero.png" alt="Earthquake Damage Predictor — main interface" width="850">
+  <p><em>📸 Replace with a full-page screenshot of the Streamlit app's input form (see "Adding Screenshots" below)</em></p>
+</div>
 
-Damage Grades
+---
 
-Grade
+## ✨ Overview
 
-Damage
+This project predicts a building's **earthquake damage grade** from its structural and location-based features. It isn't just a notebook experiment — it follows the full path a real ML product takes:
 
-1
+```
+Building Features → Preprocessing → Random Forest Model → FastAPI → Streamlit → Damage Grade + Probabilities
+```
 
-Low damage
+| Grade | Meaning |
+|:---:|---|
+| 🟢 **1** | Low damage |
+| 🟡 **2** | Medium damage |
+| 🔴 **3** | Almost complete destruction |
 
-2
+<br>
 
-Medium damage
+<table align="center">
+<tr>
+<td align="center" width="50%">
+<img src="./assets/screenshot-input.png" alt="Input form" width="400"><br>
+<em>📸 Input form — building & structural features</em>
+</td>
+<td align="center" width="50%">
+<img src="./assets/screenshot-result.png" alt="Prediction result" width="400"><br>
+<em>📸 Prediction result — damage grade & probabilities</em>
+</td>
+</tr>
+</table>
 
-3
+---
 
-Almost complete destruction
+## 🔌 How It Works
 
-🚀 Live Application
+```mermaid
+flowchart TD
+    A[👤 User] --> B[🖥️ Streamlit Frontend]
+    B -- "POST /predict" --> C[⚙️ FastAPI on Render]
+    C --> D[🤗 Model on Hugging Face Hub]
+    D --> C
+    C --> B
+    B --> E[📊 Damage Grade + Class Probabilities]
+```
 
-Streamlit App: https://earthquake-damage-predictor.streamlit.app/
+1. **User Input** — The Streamlit interface collects building and structural characteristics.
+2. **API Request** — The frontend sends the feature values to the FastAPI `/predict` endpoint.
+3. **Model Inference** — FastAPI loads the privately hosted model from Hugging Face Hub and runs the prediction.
+4. **Result** — The API returns the predicted damage grade and class probabilities, rendered instantly by Streamlit.
 
-Backend API: https://earthquake-damage-api.onrender.com
+---
 
-Interactive API Docs: https://earthquake-damage-api.onrender.com/docs
+## 🧠 The Model
 
-🧠 Model
+A **Random Forest Classifier** was selected after comparing several configurations, then tuned specifically for deployment — trading a little raw capacity for a much smaller, faster-loading model.
 
-A Random Forest Classifier was selected after comparing model configurations and evaluating their performance.
-
-The deployment model was optimized to reduce model size while keeping predictive performance close to the larger configurations tested during development.
-
-Final configuration
-
+```
 Random Forest
-├── n_estimators = 20
-├── max_features = sqrt
+├── n_estimators     = 20
+├── max_features     = sqrt
 ├── min_samples_leaf = 2
-├── random_state = 42
-└── n_jobs = -1
+├── random_state     = 42
+└── n_jobs           = -1
+```
 
-Test Accuracy: ~71.72%
-Macro F1: ~0.648
+<div align="center">
 
-The final serialized model is approximately 72 MB.
+| Metric | Score |
+|---|:---:|
+| **Test Accuracy** | ~71.72% |
+| **Macro F1** | ~0.648 |
+| **Serialized Model Size** | ~72 MB |
 
-🛠️ Tech Stack
+</div>
 
-Machine Learning
-Python · Pandas · NumPy · Scikit-learn · Joblib
+---
 
-Backend
-FastAPI · Uvicorn · Pydantic
+## 🛠️ Tech Stack
 
-Frontend
-Streamlit · Requests
+<div align="center">
 
-Deployment
-Render · Hugging Face Hub · Streamlit Community Cloud
+| Layer | Tools |
+|---|---|
+| 🤖 **Machine Learning** | Python · Pandas · NumPy · Scikit-learn · Joblib |
+| ⚙️ **Backend** | FastAPI · Uvicorn · Pydantic |
+| 🎨 **Frontend** | Streamlit · Requests |
+| ☁️ **Deployment** | Render · Hugging Face Hub · Streamlit Community Cloud |
+| 🧰 **Development** | Jupyter Notebook · VS Code · Git · GitHub |
 
-Development
-Jupyter Notebook · VS Code · Git · GitHub
+</div>
 
-🔌 How It Works
+---
 
-The application is split into a frontend and a model-serving backend.
+## 📊 Dataset
 
-1. User Input
+Built on the **[Richter's Predictor: Modeling Earthquake Damage](https://www.drivendata.org/competitions/57/nepal-earthquake/)** dataset from DrivenData — building survey records collected in Nepal after the 2015 Gorkha earthquake.
 
-The Streamlit interface collects building and structural characteristics.
+> ⚠️ The raw dataset and trained model are intentionally excluded from the public repository (see [Security](#-security--deployment-notes) below).
 
-2. API Request
+---
 
-The frontend sends the feature values to the FastAPI /predict endpoint.
+## 📁 Project Structure
 
-3. Model Inference
-
-FastAPI loads the private trained model from Hugging Face and performs the prediction.
-
-4. Result
-
-The API returns the predicted damage grade and class probabilities, which are displayed by Streamlit.
-
-┌──────────────┐
-│    User      │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│  Streamlit   │
-│   Frontend   │
-└──────┬───────┘
-       │ POST /predict
-       ▼
-┌──────────────┐
-│   FastAPI    │
-│    Render    │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│   Hugging    │
-│ Face Model   │
-└──────┬───────┘
-       │
-       ▼
-  Damage Grade
-  + Probabilities
-
-📊 Dataset
-
-Built using the Richter's Predictor: Modeling Earthquake Damage dataset from DrivenData.
-
-The dataset contains building survey information collected in Nepal following the Gorkha earthquake.
-
-View the competition →
-
-The raw dataset and trained model are intentionally excluded from the public GitHub repository.
-
-📁 Project Structure
-
+```
 earthquake-damage-prediction/
 │
 ├── api/
-│   └── main.py
+│   └── main.py                    # FastAPI inference service
 │
 ├── data/
-│   └── raw/              # Local dataset
+│   └── raw/                       # Local dataset (gitignored)
 │
-├── models/               # Local model
+├── models/                        # Local model (gitignored)
 │
-├── notebooks/            # EDA & model development
+├── notebooks/                     # EDA & model development
 │
-├── app.py                # Streamlit application
-├── README.md
-├── .gitignore
+├── app.py                         # Streamlit application
 ├── requirements-api.txt
-└── requirements-streamlit.txt
+├── requirements-streamlit.txt
+└── README.md
+```
 
+---
 
-🔐 Repository & Deployment
+## 🔐 Security & Deployment Notes
 
-The project keeps sensitive and large assets outside the public repository.
+- 🔒 `.env` is git-ignored
+- 🔒 Raw CSV dataset files are git-ignored
+- 🔒 The trained `.pkl` model is git-ignored
+- 🤗 The model is hosted **privately** on Hugging Face Hub
+- 🔑 FastAPI retrieves the model securely via an environment variable
 
-.env is ignored by Git
+This keeps the public repository focused on source code, notebooks, and architecture — not sensitive or oversized assets.
 
-Raw CSV dataset files are ignored
+---
 
-The trained .pkl model is ignored
+## 🎯 Key Takeaways
 
-The model is hosted privately on Hugging Face
+- Building a full ML classification pipeline, end to end
+- Handling categorical and numerical features together
+- Evaluating an imbalanced multi-class problem
+- Optimizing a model for real-world deployment constraints
+- Serving predictions through a REST API
+- Connecting a frontend to a live ML backend
+- Hosting a trained model separately from application code
+- Shipping — not just training — an ML application
 
-FastAPI retrieves the model securely using an environment variable
+---
 
-This keeps the GitHub repository focused on the source code, notebooks, and application architecture.
+## 🚀 Try It Yourself
 
-🎯 Key Takeaways
+```bash
+# Clone the repo
+git clone https://github.com/codelikepreety/earthquake-damage-prediction.git
+cd earthquake-damage-prediction
 
-This project demonstrates practical experience with:
+# Run the Streamlit app locally
+pip install -r requirements-streamlit.txt
+streamlit run app.py
+```
 
-Building an ML classification pipeline
+Or just use the hosted version — no setup required:
 
-Handling categorical and numerical features
+<div align="center">
 
-Evaluating an imbalanced multi-class problem
+### 🔗 [earthquake-damage-predictor.streamlit.app](https://earthquake-damage-predictor.streamlit.app/)
 
-Optimizing a model for deployment constraints
+</div>
 
-Serving predictions through a REST API
+---
 
-Connecting a frontend to an ML backend
+## 👤 Author
 
-Hosting a trained model separately from application code
+**Anima Mishra**
+🔗 [GitHub](https://github.com/codelikepreety)
 
-Deploying an end-to-end ML application
+---
 
-👤 Author
-
-Anima Mishra
+<div align="center">
+<sub>© 2026 Anima — All Rights Reserved.</sub>
+<sub>Built with 🧠 and a lot of curiosity about what makes a building fall down.</sub>
+</div>
